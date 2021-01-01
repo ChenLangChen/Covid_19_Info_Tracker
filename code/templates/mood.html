@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart','line']});
+        google.charts.setOnLoadCallback(drawChart);
+
+
+        var data = null;
+        
+        var arrayData = {{ results | tojson }} ;
+        console.log("arrayData: " + arrayData);      
+        
+        var chart = null;
+        
+            // Convert datetime strings into javascript dates
+            for (var i = 0; i < arrayData.length; i++) {
+                arrayData[i][0] = new Date(arrayData[i][0]);
+            };
+
+        function drawChart(){   
+            
+            data = new google.visualization.DataTable();
+            data.addColumn('date', 'date');
+            data.addColumn('number', 'score');          
+
+            // Add content of data
+            data.addRows(arrayData);
+
+            // Set chart options
+            var options = {'title':'Mood Overtime',
+                            hAxis:{title:'Date', format: 'yyyy/MM/dd'}, 
+                            vAxis:{title:'Sentiment Score'},
+                            backgroundColor: '#e3ca4b',
+                            
+                        };
+            var chart_div = document.getElementById("mood_chart");
+            chart = new google.visualization.LineChart(mood_chart);               
+            chart.draw(data,options);      
+        }
+    </script>
+    </head>
+    <body>
+        <!--Div that will hold the pie chart-->
+        <div id="mood_chart"></div>
+    </body>
+</html>

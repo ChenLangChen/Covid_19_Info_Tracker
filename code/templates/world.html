@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Covid-19!</title>
+
+  </head>
+  <body>
+    <!-- Start of Main container -->
+    <div class="container">
+      <div class="row">
+
+        <!-- Left section container -->
+        <div class="col-md-3  col-sm-12">
+          <div class="row">
+
+            <!-- Current statistics title -->
+            <div class="col-md-12  col-sm-12">
+              <p class="text-center"><b>Current World Statistics</b></p>
+            </div>
+
+            <!-- Current statistics section -->
+            <div class="col-md-12  col-sm-12">
+              <div class="row">
+                <div class="col-md-12  col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body">
+                          <h5 class="card-title">Confirmed Cases</h5>
+                          <p class="card-text">{{cs}}</p>
+                        </div>
+                      </div>
+                </div>
+
+                <div class="col-md-12  col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body">
+                          <h5 class="card-title">Deaths</h5>
+                          <p class="card-text">{{deaths}}</p>
+                        </div>
+                      </div>
+                </div>
+
+                <div class="col-md-12  col-sm-12">
+                    <div class="card text-center">
+                        <div class="card-body">
+                          <h5 class="card-title">Recovered</h5>
+                          <p class="card-text">{{recovered}}</p>
+                        </div>
+                      </div>
+                </div>
+
+
+                  <!-- End of row -->
+              </div>
+            </div>
+            <!-- End of current statistics section -->
+
+            <!-- Top countries metric selection -->
+            <div class="col-md-12  col-sm-12">
+                <!-- 这个就要自己设计啦！🐷 Make 2 containers here -->
+                <div class="row">
+                    <div class="col-md-4  col-sm-4">
+                      <p class="text-center"><b>TOP COUNTRIES</b></p>
+                    </div>
+                    <div class="col-md-8  col-sm-8">
+                      <div class="row">
+                        <div class="col-md-12  col-sm-12">
+                         <!-- <label for="option">Choose a table content:</label> -->
+                            <select name="country_rank_metric" id="country_rank_metric" class="form-control form-control-lg">
+                              <option value="cases">Confirmed Cases</option>
+                              <option value="deaths">Deaths</option>
+                              <option value="recovered">Recovered</option>
+                            </select>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Top countries metric selection -->
+
+            <!-- Top Countries table Container -->
+            <div class="col-md-12  col-sm-12">
+                <!-- <table id="country_rank_table" class="table table-dark"> -->
+                <table id="country_rank_table" class="display" style="width:100%">
+                  <thead>
+                  </thead>
+                  <tbody>
+                    <!-- Use a for loop for cs_rank, deaths_rank,recovered_rank -->
+                    {%  for item in world_rank %}
+                    <tr>
+                      <td> <a href="/country/{{item['region']}}">{{item['region'].title()}}</a></td>
+                      <td>{% if item['cases'] is none %}{% else %}{{item['cases'] | tojson}}{% endif %}</td>
+                      <td>{% if item['deaths'] is none %}{% else %}{{item['deaths'] | tojson}}{% endif %}</td>
+                      <td>{% if item['recovered'] is none %}{% else %}{{item['recovered'] | tojson}}{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+            <!-- End Top Countries table Container -->
+          </div>
+        </div>
+        <!-- End of left section container -->
+
+        <!-- Right section container -->
+        <div class="col-md-9  col-sm-12">
+          <div class="row">
+
+            <!-- World map container -->
+            <div class="col-md-12  col-sm-12">
+                <div id="world_map" style="width: 100%; height: 100%;"></div>
+
+            </div>
+            <!-- End of world map container -->
+
+            <!-- Aditional content container -->
+            <div class="col-md-12  col-sm-12">
+
+              <a href="#" class="button" id="btn-download-chart" download="chart.png">Download Chart as Image</a>
+              <br>
+              <br>
+              <a href='/mood'> Check out people's moods during lockdown :)</a>
+              <br><br>
+              <a href="https://storage.googleapis.com/covid19lang/historic_covid_data.csv">Download Covid-19 Data </a>
+
+            </div>
+            <!-- End of Aditional content container -->
+            <div class="col-md-12  col-sm-12" >
+
+
+
+            </div>
+
+          </div>
+        </div>
+        <!-- End of right section container -->
+
+      </div>
+    </div>
+    <!-- End of main container -->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS, then datatables -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" charset="utf-8"></script>
+
+    <!-- Datatables Scripts -->
+    <script type="text/javascript">
+        var mytable = null;
+        var mytable_id = "#country_rank_table";
+        var column_names = ["country", "cases", "deaths", "recovered"];
+        var columns = {};
+        var column_indices = {};
+
+        function hide_all_columns(){
+            // Hides all non-index columns. Assumes column 0 is the index
+            for (i = 1; i < column_names.length; i++) {
+                var column = columns[column_names[i]]
+                column.visible(false)
+            }
+        };
+
+        function show_column(name){
+            // Hides all non-index columns, except for the chosen column
+            var table = mytable;
+            hide_all_columns();
+            var column = columns[name];
+            column.visible(true);
+            sort_table(table, name, direction='desc');
+            mytable.columns.adjust().draw( false );
+            remove_table_header(mytable_id);
+        };
+
+        function sort_table(table, column_name, direction='desc'){
+            // Sort the rows based on values in a chosen column
+            var column_idx = column_indices[column_name];
+            table.order([column_idx, direction]).draw();
+        };
+
+        function remove_table_header(css_table_name){
+            // A hack to remove the datatables table header title
+            $("thead th", $(css_table_name)).removeClass("sorting_asc sorting_desc sorting_disabled");
+            $("thead th", $(css_table_name)).css("height", "0px");
+            $("thead th", $(css_table_name)).css("padding", "0px");
+        };
+
+        $(document).ready(function() {
+            mytable = $(mytable_id).DataTable( {
+                "dom": "tipr", // removed the default search box
+                "lengthChange": false, // dont show the `show 10 Entries` option
+                "columnDefs": [
+                    { "bSortable": false, "aTargets": [ "_all" ] },
+                    {
+                        "targets": [0],
+                        "visible": true,
+                        "searchable": true,
+                        "sortable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": [1],
+                        "visible": true,
+                        "searchable": false,
+                        "sortable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": [2],
+                        "visible": false,
+                        "searchable": false,
+                        "sortable": false,
+                        "orderable": false
+                    },
+                    {
+                        "targets": [3],
+                        "visible": false,
+                        "searchable": false,
+                        "sortable": false,
+                        "orderable": false
+                    }
+                ]
+            } );
+
+            // Populate mapping of column names to indices
+            column_names.forEach(function (name, index){
+                column_indices[name] = index;
+            });
+            // Populate mapping of column names to column objects
+            column_names.forEach(function (name, index){
+                columns[name] = mytable.column(index)
+            });
+
+            // hack to remove header row on page load
+            remove_table_header(mytable_id);
+        } );
+    </script>
+    <!-- End of Datatables Scripts -->
+
+    <!-- GeoMap scripts -->
+    <!-- 🐷 -->
+
+    <script type="text/javascript">
+        google.charts.load('current', {
+          'packages':['geochart'],
+          'mapsApiKey': 'AIzaSyDk9GldMUOHCru9CU4mKMyo6nFsMyYXKsE'
+        });
+        google.charts.setOnLoadCallback(prepareWorldMap);
+        var latestWorldData = {{ latestWorldData | tojson}};
+        var data = null;
+        var view = null;
+        var worldmap_chart = null;
+        var world_map_container_id  = "world_map";
+        var chart_div = document.getElementById(world_map_container_id);
+
+        function drawWorldMap(column){
+          // Get a subset of the data, using only one column
+          view = new google.visualization.DataView(data);
+          view.setColumns(["country", column]);
+
+          // TODO: maybe filter by date
+
+          var options = {
+            backgroundColor: '#81d4fa',
+            colorAxis: {colors: [ '#FFEFFF','#9a46e3']},
+            defaultColor: "#c2c2c2",
+          };
+
+          // Add 'Save as Image' listener
+
+          worldmap_chart.draw(view, options);
+        };
+
+        function prepareWorldMap() {
+          data = new google.visualization.DataTable();
+          data.addColumn('string', 'country');
+          data.addColumn('number', 'cases');
+          data.addColumn('number', 'deaths');
+          data.addColumn('number', 'recovered');
+
+          // // Add content of data
+          data.addRows(latestWorldData);
+
+
+          // Draw initial map
+          worldmap_chart = new google.visualization.GeoChart(chart_div);
+
+          // Adding 'Save Image' listener
+          drawWorldMap("cases");
+
+          // Add event handler for clicks on countries
+          google.visualization.events.addListener(worldmap_chart, 'select', function() {
+              var selectedItem = worldmap_chart.getSelection()[0];
+              if (selectedItem) {
+                var countryLabel = data.getValue(selectedItem.row, 0);
+                var countryId = countryLabel.toLowerCase().replace(/ /g, "_");
+                window.location.href = `/country/${countryId}`;
+              }
+          });
+        }
+
+
+    </script>
+    <!-- End GeoMap scripts -->
+
+    <!-- User Interaction Scripts -->
+    <script type="text/javascript">
+        // Event listener for metric dropdown menu
+        $('select[name="country_rank_metric"]').change(function(){
+            var column_name = $(this).val();
+            show_column(column_name);
+            drawWorldMap(column_name);
+        });
+    </script>
+    <!-- End User Interaction Scripts -->
+    <script>
+      // Download chart image event listener
+      var button = document.getElementById('btn-download-chart');
+        button.addEventListener('click', function (e) {
+            var imageData = worldmap_chart.getImageURI();
+            button.href = imageData;
+        });
+    </script>
+
+  </body>
+</html>

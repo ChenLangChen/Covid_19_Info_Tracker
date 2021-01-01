@@ -1,0 +1,2 @@
+For the latest Covid-19 Historic Data
+https://storage.googleapis.com/covid19lang/historic_covid_data.csv

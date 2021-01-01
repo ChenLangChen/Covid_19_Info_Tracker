@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <style media="screen">
+      .chart_aspect_ratio_container {
+         background-color: #dedede;
+         position: relative;
+         width: 100%;
+         padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      }
+
+      .chart_aspect_ratio_child {
+         position:  absolute;
+         top: 0;
+         left: 0;
+         bottom: 0;
+         right: 0;
+         text-align: center;
+         
+      }
+  </style>
+    
+    <!-- Country plot js -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart','line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+
+      var data = null;
+      var arrayData = {{ results | tojson }} ;
+      var chart = null;
+      
+        // Convert datetime strings into javascript dates
+        for (var i = 0; i < arrayData.length; i++) {
+            arrayData[i][0] = new Date(arrayData[i][0]);
+        };
+
+      function drawChart(){   
+        
+        data = new google.visualization.DataTable();
+        data.addColumn('date', 'date');
+        data.addColumn('number', 'cases');          
+
+        // Add content of data
+        data.addRows(arrayData);
+
+        // Set chart options
+        var options = {'title':'Confirmed Cases Overtime',
+                        hAxis:{title:'Date', format: 'yyyy/MM/dd'}, 
+                        vAxis:{title:'Total Confirmed Cases'},
+                        backgroundColor: '#e3ca4b',
+                        
+                       };
+        var chart_div = document.getElementById('Confirmed_cases_Chart');
+        chart = new google.visualization.LineChart(Confirmed_cases_Chart);               
+        chart.draw(data,options);
+      }
+    </script>
+
+
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Country</title>
+  </head>
+  <body>
+      <div class="container">
+          <div class="row">
+              <!-- Left column -->
+              <div class="col-md-3  col-sm-12">
+                  
+
+                  <div class="row">
+                      
+                      <!-- Confirmed cases -->
+                      <div class="col-md-12  col-sm-12 p-3 mb-2 bg-light text-dark" >
+                        <p class="text-center"><b>{{country}}</b></p>
+                        <div class="card text-center">
+                            <div class="card-body">
+                              <h5 class="card-title">Confirmed Cases</h5>
+                              <p class="card-text">{{cs_latest}}</p>
+                              
+                            </div>
+                          </div>
+                      </div>
+                      <!-- Deaths -->
+                      <div class="col-md-12  col-sm-12 p-3 mb-2 bg-light text-dark" >
+                        <div class="card text-center">
+                            <div class="card-body">
+                              <h5 class="card-title">Deaths</h5>
+                              <p class="card-text">{{deaths_latest}}</p>                             
+                            </div>
+                          </div>
+                      </div>
+
+                       <!-- Recovered -->
+                      <div class="col-md-12  col-sm-12 p-3 mb-2 bg-light text-dark" >
+                        <div class="card text-center">
+                            <div class="card-body">
+                              <h5 class="card-title">Recovered</h5>
+                              <p class="card-text">{{recovered_latest}}</p>
+                              
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+        
+
+              </div>
+              <div class="col-md-9  col-sm-12">
+                <div class="row">
+                  <div class="col-md-12  col-sm-12">
+                      <div class="chart_aspect_ratio_container">
+                          <div class="chart_aspect_ratio_child" id="Confirmed_cases_Chart"></div>
+                      </div>
+                  </div>
+                </div>  
+
+                <div class="row">                  
+                  <div class="col-md-12  col-sm-12"><a href="#" class="button" id="btn-download-chart" download="chart.png">Download Chart as Image</a> </div>
+                </div>
+              </div>
+
+
+              <!-- Right column -->
+              
+              
+          </div>
+      </div>
+    
+    <script>
+      // Download chart image event listener
+      var button = document.getElementById('btn-download-chart');
+        button.addEventListener('click', function (e) {
+            var imageData = chart.getImageURI();
+            button.href = imageData;
+        });
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
