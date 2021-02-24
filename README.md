@@ -1,3 +1,6 @@
+# Link to live version
+https://covid19-274903.wl.r.appspot.com/
+
 # Summary 
 This project aims at providing real-time Covid-19 information from all around the world to users. The information includes number of confirmed cases, number of deaths, number of recovered, the trend of growth of confirmed cases in each country as well as how people’s mood fluctuates during the lockdown. At the same time, it also provides the raw historic worldwide data of Covid19 to developers for their own purpose.
 
